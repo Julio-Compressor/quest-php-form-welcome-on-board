@@ -16,7 +16,9 @@ body {
     flex-direction: column;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: "Montserrat", Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -38,4 +40,9 @@ img {
     max-width: 800px;
     margin: auto;
     padding: 0 var(--spacing);
+}
+
+form h3 {
+    color: var(--primary-color);
+
 }

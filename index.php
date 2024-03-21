@@ -1,3 +1,27 @@
+<?php
+$data=array_map('trim', $_POST);
+$data=array_map('htmlentities',$data);
+// $errors=[];
+if (!empty($data)) {
+    if (empty($data['name'])) {
+        $errors[]='Please enter your name';
+    }
+    if (empty($data['email'])) {
+        $errors[]='Please enter your Email';
+    }
+    if (empty($data['subject'])) {
+        $errors[]='Please make your selection';
+    }
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors[]='Invalid Email';
+    }
+}
+if (!empty($data) && empty($errors)) {
+    header("location: treatment.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,9 +79,42 @@
                 quaerat nemo nam, consequuntur nisi alias in praesentium. Fuga amet esse nam doloremque ut nemo nostrum.
             </p>
         </section>
+        <section class="container">
+            <h2 id="form">Get in touch</h2>
+            <?php
+            if (!isset($errors)) {
+                echo "<p>Leave us a message and we will get back to you as soon as possible.</p>";
+                echo '<p>Fields marked with red wildcards * are required</p>';
+            } else {
+                echo "<h2>Please fix errors below</h2>";
+                echo "<ul>";
+                foreach ($errors as $error) {
+                    echo "<li>$error</li>";
+                }
+                echo "</ul>";
+            }
+            ?>
+            <form action="" method='post'>
+                <label for="name"><h3>Name<span>*</span></h3></label>
+                <input type="text" id="name" name="name" value="<?= $data['name'] ?? '' ?>" required></input>
+
+                <label for="email"><h3>Email<span>*</span></h3></label>
+                <input type="email" id="email" name="email" value="<?= $data['email'] ?? '' ?>" required></input>
+
+                <label for="subject"><h3>Subjetc<span>*</span></h3></label>
+                <select id="subject" name="subject" required>
+                    <option value="">--Choose an option--</option>
+                    <option value="rdv">Book a meeting</option>
+                    <option value="devis">Request a quote</option>
+                    <option value="newsletter">Newsletter</option>
+                </select>
+                <label for="message"><h3>Message</h3></label>
+                <textarea name="message" id="message" rows="10"><?= $data['message'] ?? '' ?></textarea><br>
+                <input class="btn" type="submit" value="Send">
+            </form>
+        </section>
         <?php //@todo Add a contact form  ?>
     </main>
     <?php include '_footer.php' ?>
 </body>
-
 </html>
